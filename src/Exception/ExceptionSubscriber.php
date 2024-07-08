@@ -2,6 +2,7 @@
 
 namespace App\Exception;
 
+use App\Exception\Constants\ExceptionType;
 use App\Exception\Constants\HTTPCodeResolver;
 use App\Exceptions\Contracts\IPlatformException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -20,7 +21,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $exception = $event->getThrowable();
 
-        $type = null;
+        $type = ExceptionType::UNKNOWN;
         if ($exception instanceof IPlatformException) {
             $type = $exception->getType();
         }
