@@ -20,13 +20,14 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $exception = $event->getThrowable();
 
-        if (!$exception instanceof IPlatformException) {
-            return;
+        $type = null;
+        if ($exception instanceof IPlatformException) {
+            $type = $exception->getType();
         }
 
         $responseData = [
             'error' => [
-                'code' => HTTPCodeResolver::ERROR_TYPE[$exception->getType()] ?? null,
+                'code' => HTTPCodeResolver::ERROR_TYPE[$type] ?? null,
                 'message' => $exception->getMessage()
             ]
         ];
