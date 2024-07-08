@@ -19,7 +19,7 @@ class TaskResponseDto
     /**
      * @param string $id
      * @param string $name
-     * @param string|null $project
+     * @param string|null $project_id
      * @param \DateTimeInterface|null $deletedAt
      * @param \DateTimeInterface $createdAt
      * @param \DateTimeInterface|null $updatedAt

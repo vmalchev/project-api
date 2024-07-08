@@ -12,7 +12,6 @@ class UserResponseMapper
         return new UserResponseDto(
             $user->getId(),
             $user->getUsername(),
-            $user->getPassword(),
             $user->getEmail(),
             $user->getCreatedAt(),
             $user->getUpdatedAt()

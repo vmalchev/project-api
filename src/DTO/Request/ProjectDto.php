@@ -30,7 +30,7 @@ class ProjectDto implements RequestDtoInterface
     public string|null $description = null;
 
     #[Assert\NotBlank]
-    #[Assert\Choice(callback: [Status::class, 'values'], message: 'Choose a valid status')]
+    #[Assert\Choice(callback: [Status::class, 'values'], message: 'Choose a valid status["NOT_STARTED", "IN_PROGRESS", "PENDING", "ON_HOLD", "COMPLETED", "APPROVED"]')]
     public string $status;
 
     #[Assert\NotBlank]

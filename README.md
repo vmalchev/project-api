@@ -16,7 +16,7 @@ git clone https://github.com/vmalchev/project-api.git
 
 ### 2. Manage containers
 
-This will bring 5 containers up, and forward needed ports to the localhost:
+This will bring 3 containers up, and forward needed ports to the localhost:
 
 | Name / hostname | Ports | Description   |
 |-----------------|-------|---------------|
@@ -30,6 +30,16 @@ Containers are accessible internally via their hostnames. For example you can ac
 The full configuration can be found in **docker-compose.yaml** file
 
 ### 3. Environment setup
+
+Start(initialize) containers
+```bash
+docker compose -up -d
+```
+
+Get inside container
+```bash
+docker exec -it app-php bash
+```
 
 The `.env` file is under gitignore and can be used to customize the local environment.
 Copy template environment file.
@@ -49,6 +59,11 @@ php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 
 
+```
+
+Generate SSL keys:
+```bash
+php bin/console lexik:jwt:generate-keypair
 ```
 
 ## Authentication
