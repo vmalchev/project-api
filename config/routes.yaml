@@ -1,3 +1,65 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+register:
+    path: /api/register
+    controller: App\Controller\AuthController::register
+    methods: POST
+
+token:
+  path: /api/token
+  controller: App\Controller\AuthController::token
+  methods: POST
+
+api_login_check:
+  path: /api/login_check
+
+###PROJECTS###
+project_index:
+  path: /api/projects
+  controller: App\Controller\ProjectController::index
+  methods: GET
+
+project_create:
+  path: /api/projects
+  controller: App\Controller\ProjectController::create
+  methods: POST
+
+project_show:
+  path: /api/projects/{id}
+  controller: App\Controller\ProjectController::show
+  methods: GET
+
+project_update:
+  path: /api/projects/{id}
+  controller: App\Controller\ProjectController::update
+  methods: PUT
+
+project_delete:
+  path: /api/projects/{id}
+  controller: App\Controller\ProjectController::delete
+  methods: DELETE
+
+
+###TASKS###
+task_index:
+  path: /api/tasks
+  controller: App\Controller\TaskController::index
+  methods: GET
+
+task_create:
+  path: /api/tasks
+  controller: App\Controller\TaskController::create
+  methods: POST
+
+task_show:
+  path: /api/tasks/{id}
+  controller: App\Controller\TaskController::show
+  methods: GET
+
+task_update:
+  path: /api/tasks/{id}
+  controller: App\Controller\TaskController::update
+  methods: PUT
+
+task_delete:
+  path: /api/tasks/{id}
+  controller: App\Controller\TaskController::delete
+  methods: DELETE
