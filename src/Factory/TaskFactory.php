@@ -4,6 +4,7 @@ namespace App\Factory;
 
 use App\DTO\Request\TaskDto;
 use App\Entity\Task;
+use App\Exception\ProjectNotFoundException;
 use App\Repository\ProjectRepository;
 use DateTime;
 
@@ -18,9 +19,15 @@ class TaskFactory
 
     public function create(TaskDto $taskDto): Task
     {
+        $project = $this->projectRepository->findById($taskDto->project);
+
+        if (is_null($project)) {
+            throw new ProjectNotFoundException("Project with ID '" . $taskDto->project . "' not found.");
+        }
+
         return $this->task
             ->setName($taskDto->name)
-            ->setProject($this->projectRepository->findById($taskDto->project))
+            ->setProject($project)
             ->setUpdatedAt(new DateTime('now'))
         ;
     }
