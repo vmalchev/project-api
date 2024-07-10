@@ -7,6 +7,8 @@ use Doctrine\DBAL\Exception\ConnectionException;
 use Prugala\RequestDto\Exception\RequestValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class ExceptionSubscriber
@@ -16,13 +18,12 @@ class ExceptionSubscriber
     {
         $exception = $event->getThrowable();
 
-        $code = JsonResponse::HTTP_INTERNAL_SERVER_ERROR;
+        $code = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode(): JsonResponse::HTTP_INTERNAL_SERVER_ERROR;
         $message = $exception->getMessage();
 
         if ($exception instanceof IPlatformException) {
             $code = $exception->getCode();
         } elseif ($exception instanceof RequestValidationException) {
-            $code = $exception->getStatusCode();
             $message = $this->formatValidationErrors($exception->getViolationList());
         } elseif ($exception instanceof ConnectionException) {
             $message = 'Internal database connection error';
