@@ -45,7 +45,7 @@ class Project
     #[ORM\Column(type: 'string', length:255, nullable: true)]
     private string|null $company = null;
 
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: "project", cascade: ['persist', "remove"], fetch: 'LAZY', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: "Task", mappedBy: "project", cascade: ['persist', "remove"], fetch: 'LAZY', orphanRemoval: true)]
     private Collection $tasks;
     #[ORM\Column(name: 'deleted_at', type: Types::DATETIME_MUTABLE, nullable: true)]
     private DateTimeInterface|null $deletedAt = null;
@@ -148,7 +148,9 @@ class Project
 
     public function getTasks(): Collection
     {
-        return $this->tasks;
+        return $this->tasks->filter(function (Task $task) {
+            return is_null($task->getDeletedAt());
+        });
     }
 
     public function setTasks(Collection $tasks): self

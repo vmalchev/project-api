@@ -41,7 +41,7 @@ class ProjectRepository extends ServiceEntityRepository implements IProjectRepos
 
     public function findById(Uuid $id): ?Project
     {
-        return $this->find($id);
+        return $this->findOneBy(['id' => $id, 'deletedAt' => null]);
     }
 
     public function findByTitleAndClient(string $title, string $client): ?Project

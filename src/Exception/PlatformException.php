@@ -2,7 +2,6 @@
 
 namespace App\Exception;
 
-use App\Exception\Constants\ExceptionCode;
 use App\Exception\Constants\ExceptionType;
 use Psr\Log\LogLevel;
 
@@ -13,10 +12,10 @@ trait PlatformException
     protected array $errors;
     private string $originalMessage;
 
-    public function __construct(?string $messageKey, array $errors=[], ?string $originalMessage='')
+    public function __construct(?string $messageKey=null, ?int $exceptionCode=null, array $errors=[], ?string $originalMessage='')
     {
         $message = $messageKey ?: (static::$defaultMessageKey ?? ExceptionType::UNKNOWN);
-        $code = static::$defaultCode ?? ExceptionCode::UNKNOWN;
+        $code = $exceptionCode ?? static::$defaultCode;
 
         parent::__construct($message, $code);
 

@@ -2,38 +2,60 @@
 
 namespace App\Exception;
 
-use App\Exception\Constants\ExceptionType;
-use App\Exception\Constants\HTTPCodeResolver;
 use App\Exceptions\Contracts\IPlatformException;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Doctrine\DBAL\Exception\ConnectionException;
+use Prugala\RequestDto\Exception\RequestValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class ExceptionSubscriber implements EventSubscriberInterface
+class ExceptionSubscriber
 {
-    public static function getSubscribedEvents()
-    {
-        return [KernelEvents::EXCEPTION => 'onKernelException'];
-    }
 
-    public function onKernelException(ExceptionEvent $event): void
+    public function __invoke(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
 
-        $type = ExceptionType::UNKNOWN;
+        $code = JsonResponse::HTTP_INTERNAL_SERVER_ERROR;
+        $message = $exception->getMessage();
+
         if ($exception instanceof IPlatformException) {
-            $type = $exception->getType();
+            $code = $exception->getCode();
+        } elseif ($exception instanceof RequestValidationException) {
+            $code = $exception->getStatusCode();
+            $message = $this->formatValidationErrors($exception->getViolationList());
+        } elseif ($exception instanceof ConnectionException) {
+            $message = 'Internal database connection error';
         }
 
         $responseData = [
             'error' => [
-                'code' => HTTPCodeResolver::ERROR_TYPE[$type] ?? null,
-                'message' => $exception->getMessage()
+                'code' => $code,
+                'message' => $message
             ]
         ];
 
         $event->allowCustomResponseCode();
-        $event->setResponse(new JsonResponse($responseData), 200);
+        $event->setResponse(new JsonResponse($responseData));
     }
+
+    private function formatValidationErrors(ConstraintViolationListInterface $violationList): array
+    {
+        $errors = [];
+
+        foreach ($violationList as $violation) {
+            $data = [
+                'message' => $violation->getMessage(),
+            ];
+
+            if (!empty($violation->getPropertyPath())) {
+                $data['context']['field'] = $violation->getPropertyPath();
+            }
+
+            $errors[] = $data;
+        }
+
+        return $errors;
+    }
+
 }

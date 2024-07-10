@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ProjectDto implements RequestDtoInterface
 {
     #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[Assert\Type("string")]
     #[Assert\Length(
         min: 3,
@@ -20,7 +21,7 @@ class ProjectDto implements RequestDtoInterface
         minMessage: 'Title must be at least {{ limit }} characters long',
         maxMessage: 'Title cannot be longer than {{ limit }} characters',
     )]
-    public string $title;
+    public string|null $title = null;
 
     #[Assert\Type("string")]
     #[Assert\Length(
@@ -34,8 +35,9 @@ class ProjectDto implements RequestDtoInterface
     public string $status;
 
     #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[Assert\Callback([DateIntervalValidator::class, 'validate'])]
-    public string $duration;
+    public string|null $duration = null;
 
     #[Assert\Type("string")]
     #[Assert\Length(

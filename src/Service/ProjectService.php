@@ -5,10 +5,9 @@ namespace App\Service;
 use App\DTO\Request\ProjectDto;
 use App\DTO\Response\Mapper\ProjectResponseMapper;
 use App\DTO\Response\ProjectResponseDto;
-use App\Entity\Project;
-use App\Exception\ProjectException;
 use App\Exception\ProjectNotFoundException;
 use App\Exception\ProjectTitleClientExistsException;
+use App\Exception\TaskException;
 use App\Factory\ProjectFactory;
 use App\Repository\Contract\IProjectRepository;
 use DateTime;
@@ -77,6 +76,9 @@ class ProjectService
 
         if (is_null($projectEntity)) {
             throw new ProjectNotFoundException('Project with ID "' . $id . '" not found.');
+        }
+        if (false !== $projectEntity->getTasks()->first()) {
+            throw new TaskException('Cannot delete project while it has assigned tasks.');
         }
 
         $projectEntity->setDeletedAt(new DateTime('now'));

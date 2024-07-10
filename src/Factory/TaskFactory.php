@@ -7,6 +7,7 @@ use App\Entity\Task;
 use App\Exception\ProjectNotFoundException;
 use App\Repository\ProjectRepository;
 use DateTime;
+use Symfony\Component\Uid\Uuid;
 
 class TaskFactory
 {
@@ -19,7 +20,7 @@ class TaskFactory
 
     public function create(TaskDto $taskDto): Task
     {
-        $project = $this->projectRepository->findById($taskDto->project);
+        $project = $this->projectRepository->findById(Uuid::fromString($taskDto->project));
 
         if (is_null($project)) {
             throw new ProjectNotFoundException("Project with ID '" . $taskDto->project . "' not found.");

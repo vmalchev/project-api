@@ -28,7 +28,7 @@ class Task
 
     #[ORM\ManyToOne(targetEntity: "Project", inversedBy: "tasks")]
     #[ORM\JoinColumn(name: "project_id", referencedColumnName: "id")]
-    private Project $project;
+    private Project|null $project = null;
 
     #[ORM\Column(name: 'deleted_at', type: Types::DATETIME_MUTABLE, nullable: true)]
     private DateTimeInterface|null $deletedAt = null;

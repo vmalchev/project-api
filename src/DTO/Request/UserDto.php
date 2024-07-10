@@ -16,7 +16,7 @@ class UserDto implements RequestDtoInterface
         minMessage: 'Username must be at least {{ limit }} characters long',
         maxMessage: 'Username cannot be longer than {{ limit }} characters',
     )]
-    public string $username;
+    public string|null $username;
 
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -27,7 +27,7 @@ class UserDto implements RequestDtoInterface
         minMessage: 'Password must be at least {{ limit }} characters long',
         maxMessage: 'Password cannot be longer than {{ limit }} characters',
     )]
-    public string $password;
+    public string|null $password;
 
     #[Assert\Type("string")]
     #[Assert\Email(

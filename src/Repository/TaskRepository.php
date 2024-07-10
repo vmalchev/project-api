@@ -42,7 +42,8 @@ class TaskRepository extends ServiceEntityRepository implements ITaskRepository
 
     public function findById(Uuid $id): ?Task
     {
-        return $this->find($id);
+        return $this->findOneBy(['id' => $id, 'deletedAt' => null]);
+
     }
 
     public function findByNameAndProject(string $name, Project $project): ?Task
