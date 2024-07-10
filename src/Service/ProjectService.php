@@ -63,6 +63,10 @@ class ProjectService
             throw new ProjectNotFoundException("Project with ID '" . $id . "' not found.");
         }
 
+        if (!is_null($this->projectRepository->findByTitleAndClient($projectEntity->getTitle(), $projectEntity->getClient()))) {
+            throw new ProjectTitleClientExistsException("Client with the title '" . $projectEntity->getTitle() . "' already exists.");
+        }
+
         $project = $this->projectFactory->setProjectEntity($projectEntity)->create($projectDto);
         $this->projectRepository->flush();
 
