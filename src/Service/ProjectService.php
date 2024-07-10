@@ -63,7 +63,7 @@ class ProjectService
             throw new ProjectNotFoundException("Project with ID '" . $id . "' not found.");
         }
 
-        if (!is_null($this->projectRepository->findByTitleAndClient($projectEntity->getTitle(), $projectEntity->getClient()))) {
+        if (!is_null($this->projectRepository->findByTitleAndClient($projectDto->title, $projectDto->client))) {
             throw new ProjectTitleClientExistsException("Client with the title '" . $projectEntity->getTitle() . "' already exists.");
         }
 
